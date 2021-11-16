@@ -1,11 +1,82 @@
 ﻿// RSA.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
 
-#include <iostream>
+#include<iostream>
+#include<math.h>
+
+using namespace std;
+
+//to find gcd
+int gcd(int a, int h)
+{
+	int temp;
+	while (1)
+	{
+		temp = a % h;
+		if (temp == 0)
+			return h;
+		a = h;
+		h = temp;
+	}
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
+
+	setlocale(LC_ALL, "rus");
+
+	//2 простых любых числа
+	double p = 3;
+	double q = 7;
+	double n = p * q;
+	double count;
+	double f = (p - 1)*(q - 1);
+
+	//открытый ключ
+	//e расшифровывается как шифрование
+	double e = 2;
+
+	//для проверки простого числа, удовлетворяющего e>1
+	while (e < f) 
+	{
+		count = gcd(e, f);
+		if (count == 1)
+		{
+			break;
+		}
+		else
+		{
+			e++;
+		}
+	}
+
+	//закрытый ключ
+	//d расшифровывается как расшифровка
+	double d;
+
+	//k может быть любым произвольным значением
+	double k = 2;
+
+	//выбор d таким образом, чтобы он удовлетворял d*e = 1 + k * f
+	d = (1 + (k*f)) / e;
+	double message = 12;
+	double c = pow(message, e);
+	double m = pow(c, d);
+	c = fmod(c, n);
+	m = fmod(m, n);
+
+	cout << "Сообщение = " << message;
+	cout << "\n" << "p = " << p;
+	cout << "\n" << "q = " << q;
+	cout << "\n" << "n = pq = " << n;
+	cout << "\n" << "f = " << f;
+	cout << "\n" << "e = " << e;
+	cout << "\n" << "d = " << d;
+	cout << "\n" << "Зашифрованные данные = " << c;
+	cout << "\n" << "Отправленое исходное сообщение = " << m;
+	
+	
+	return 0;
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
